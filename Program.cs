@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -14,7 +15,8 @@ namespace RandomDateTime
 
 
         static readonly Random rnd = new Random();
-        private static Timer aTimer;
+        private static System.Timers.Timer aTimer;
+        private static ManualResetEvent mre = new ManualResetEvent(false);
 
         static void Main(string[] args)
         {
@@ -37,7 +39,9 @@ namespace RandomDateTime
 
 
                 SetTimer(inter);
+                mre.Reset();
 
+                Console.WriteLine("Fin");
 
                 //Console.ReadLine();
 
@@ -49,24 +53,30 @@ namespace RandomDateTime
 
 
 
-        private static void SetTimer(double time)
+        private static  void SetTimer(double time)
         {
             // Create a timer with a two second interval.
-            aTimer = new Timer(time);
+            aTimer = new System.Timers.Timer(time);
             // Hook up the Elapsed event for the timer. 
-            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Elapsed +=  OnTimedEvent;
             aTimer.AutoReset = false;
             aTimer.Enabled = true;
+            mre.WaitOne();
+
+
         }
 
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-            Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
+           Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
                               e.SignalTime);
+            mre.Set();
+
+
             //aTimer.Elapsed -= OnTimedEvent;
 
         }
-    
+
 
 
         public static DateTime GetRandomDate(DateTime from, DateTime to)
