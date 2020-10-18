@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+
 
 namespace RandomDateTime
 {
@@ -16,27 +18,32 @@ namespace RandomDateTime
 
         static void Main(string[] args)
         {
-            DateTime timeNow = DateTime.Now;/*ToString("yyyy-MM-dd h:mm:ss tt");*/
-            DateTime timeWeek = DateTime.Now.AddSeconds(30);/*.ToString("dd.MM.yy");*/
-            DateTime randomdate = GetRandomDate(timeNow, timeWeek);
+            int x = 1;
+            
+            while(x == 1){
 
-            Console.WriteLine(timeNow);
-            Console.WriteLine(timeWeek);
-            Console.WriteLine(randomdate);
+                DateTime timeNow = DateTime.Now;/*ToString("yyyy-MM-dd h:mm:ss tt");*/
+                DateTime timeWeek = DateTime.Now.AddSeconds(30);/*.ToString("dd.MM.yy");*/
+                DateTime randomdate = GetRandomDate(timeNow, timeWeek);
 
-            double inter = (randomdate - timeNow).TotalMilliseconds;
-          
-            Console.WriteLine(inter);
+                Console.WriteLine(timeNow);
+                Console.WriteLine(timeWeek);
+                Console.WriteLine(randomdate);
+
+                double inter = (randomdate - timeNow).TotalMilliseconds;
+
+                Console.WriteLine(inter);
 
 
 
-            SetTimer(inter);
+                SetTimer(inter);
 
-           
-            Console.ReadLine();
 
-            aTimer.Stop();
-            aTimer.Dispose();
+                //Console.ReadLine();
+
+                aTimer.Stop();
+                aTimer.Dispose();
+            }
             
         }
 
@@ -48,7 +55,7 @@ namespace RandomDateTime
             aTimer = new Timer(time);
             // Hook up the Elapsed event for the timer. 
             aTimer.Elapsed += OnTimedEvent;
-            aTimer.AutoReset = true;
+            aTimer.AutoReset = false;
             aTimer.Enabled = true;
         }
 
@@ -56,6 +63,8 @@ namespace RandomDateTime
         {
             Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
                               e.SignalTime);
+            //aTimer.Elapsed -= OnTimedEvent;
+
         }
     
 
