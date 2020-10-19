@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -19,22 +21,25 @@ namespace RandomDateTime
         private static ManualResetEvent mre = new ManualResetEvent(false);
         public static List<Quote> qlist = new List<Quote>();
         public static int quotecount;
-        public static int x = 1;
+        public static bool listempty = false;
 
         static void Main(string[] args)
         {
-         
+
             //List <Quote> qlist = new List<Quote>();
+            string json = File.ReadAllText("../../datafile.json");
+            qlist = JsonConvert.DeserializeObject<List<Quote>>(json);
+            //qlist.Add(JsonConvert.DeserializeObject<Quote>(json));
 
             qlist.Add(new Quote("London"));
             qlist.Add(new Quote ( "New York" ));
 
             string y = qlist[0].qutoe;
 
-            while (x == 1){
+            while (listempty == false){
 
                 DateTime timeNow = DateTime.Now;/*ToString("yyyy-MM-dd h:mm:ss tt");*/
-                DateTime timeWeek = DateTime.Now.AddSeconds(5);/*.ToString("dd.MM.yy");*/
+                DateTime timeWeek = DateTime.Now.AddSeconds(1);/*.ToString("dd.MM.yy");*/
                 DateTime randomdate = GetRandomDate(timeNow, timeWeek);
 
                 Console.WriteLine(timeNow);
@@ -106,7 +111,7 @@ namespace RandomDateTime
         {
             if (qnumber + 1 == qlist.Count())
             {
-                x = 0;
+                listempty = true;
                 return qlist[qnumber].qutoe;
              
             }
