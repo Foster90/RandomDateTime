@@ -34,12 +34,12 @@ namespace RandomDateTime
             qlist.Add(new Quote("London"));
             qlist.Add(new Quote ( "New York" ));
 
-            string y = qlist[0].qutoe;
+            string list = qlist[quotecount].qutoe;
 
             while (listempty == false){
 
                 DateTime timeNow = DateTime.Now;/*ToString("yyyy-MM-dd h:mm:ss tt");*/
-                DateTime timeWeek = DateTime.Now.AddSeconds(1);/*.ToString("dd.MM.yy");*/
+                DateTime timeWeek = DateTime.Now.AddSeconds(10);/*.ToString("dd.MM.yy");*/
                 DateTime randomdate = GetRandomDate(timeNow, timeWeek);
 
                 Console.WriteLine(timeNow);
@@ -52,7 +52,7 @@ namespace RandomDateTime
 
 
 
-                SetTimer(inter, y);
+                SetTimer(inter, list);
                 mre.Reset();
 
                 Console.WriteLine("Fin");
