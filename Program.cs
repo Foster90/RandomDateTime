@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,7 @@ namespace RandomDateTime
         public static List<Quote> qlist = new List<Quote>();
         public static int quotecount;
         public static bool listempty = false;
+       
 
         static void Main(string[] args)
         {
@@ -36,15 +38,30 @@ namespace RandomDateTime
 
             string list = qlist[quotecount].qutoe;
 
-            while (listempty == false){
+            while (listempty == false) {
 
                 DateTime timeNow = DateTime.Now;/*ToString("yyyy-MM-dd h:mm:ss tt");*/
                 DateTime timeWeek = DateTime.Now.AddSeconds(10);/*.ToString("dd.MM.yy");*/
                 DateTime randomdate = GetRandomDate(timeNow, timeWeek);
 
-                Console.WriteLine(timeNow);
-                Console.WriteLine(timeWeek);
-                Console.WriteLine(randomdate);
+
+             
+
+                //using (FileStream s2 = new FileStream("log.txt", FileMode.OpenOrCreate, FileAccess.Write))
+                using (var file = File.Exists("log.txt") ? File.Open("log.txt", FileMode.Append) : File.Open("log.txt", FileMode.CreateNew))
+                {
+                    using (StreamWriter sr = new StreamWriter(file))
+                    {
+                        sr.WriteLine(timeNow);
+                        sr.WriteLine(timeWeek);
+                        sr.WriteLine(randomdate);
+
+                    }
+                }
+                //Console.WriteLine(timeNow);
+                //Console.WriteLine(timeWeek);
+                //Console.WriteLine(randomdate);
+                 
 
                 double inter = (randomdate - timeNow).TotalMilliseconds;
 
@@ -56,8 +73,6 @@ namespace RandomDateTime
                 mre.Reset();
 
                 Console.WriteLine("Fin");
-
-                //Console.ReadLine();
 
                 aTimer.Stop();
                 aTimer.Dispose();
