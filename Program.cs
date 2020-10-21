@@ -44,35 +44,22 @@ namespace RandomDateTime
                 DateTime timeWeek = DateTime.Now.AddSeconds(10);/*.ToString("dd.MM.yy");*/
                 DateTime randomdate = GetRandomDate(timeNow, timeWeek);
 
+                WriteToFile(timeNow.ToString());
+                WriteToFile(timeWeek.ToString());
+                WriteToFile(randomdate.ToString());
 
-             
-
-                //using (FileStream s2 = new FileStream("log.txt", FileMode.OpenOrCreate, FileAccess.Write))
-                using (var file = File.Exists("log.txt") ? File.Open("log.txt", FileMode.Append) : File.Open("log.txt", FileMode.CreateNew))
-                {
-                    using (StreamWriter sr = new StreamWriter(file))
-                    {
-                        sr.WriteLine(timeNow);
-                        sr.WriteLine(timeWeek);
-                        sr.WriteLine(randomdate);
-
-                    }
-                }
-                //Console.WriteLine(timeNow);
-                //Console.WriteLine(timeWeek);
-                //Console.WriteLine(randomdate);
-                 
+                                
 
                 double inter = (randomdate - timeNow).TotalMilliseconds;
 
-                Console.WriteLine(inter);
+                WriteToFile(inter.ToString());
 
 
 
                 SetTimer(inter, list);
                 mre.Reset();
 
-                Console.WriteLine("Fin");
+                WriteToFile("Fin");
 
                 aTimer.Stop();
                 aTimer.Dispose();
@@ -135,5 +122,19 @@ namespace RandomDateTime
                 return qlist[qnumber].qutoe;
             }
         }
+
+
+        private static void WriteToFile(string input)
+        {
+            using (var file = File.Exists("log.txt") ? File.Open("log.txt", FileMode.Append) : File.Open("log.txt", FileMode.CreateNew))
+            {
+                using (StreamWriter sr = new StreamWriter(file))
+                {
+                    sr.WriteLine(input);                
+
+                }
+            }
+        }
+
     }
 }
